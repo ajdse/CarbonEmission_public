@@ -27,7 +27,7 @@ VALID_CONFIG_KEYS = [
 
 class IndustryStatsTransformer(BaseEstimator, TransformerMixin):
     """Calculates Mean and Std Dev per industry ONLY on fit data."""
-    def __init__(self, industry_col_name='2022NAICSUSCode',smooth_param=0.8):
+    def __init__(self, industry_col_name='industrycode',smooth_param=0.8):
         self.industry_col_name = industry_col_name
         self.smooth_param = smooth_param
         self.industry_mean_map_ = {}
@@ -51,10 +51,6 @@ class IndustryStatsTransformer(BaseEstimator, TransformerMixin):
 
         self.global_mean_ = train_df['_outcome_'].mean()
         self.global_std_ = train_df['_outcome_'].std()
-
-        if train_df[self.industry_col_name].
-
-        self.industry_col_name_u1 = train_df[self].industry_col_name].
 
         # Calculate mean and std dev dynamically from this fold's training data
         industry_summary_stats = train_df.groupby(self.industry_col_name)['_outcome_'].agg([['mean','count','var']])
@@ -193,7 +189,7 @@ def build_model_pipeline(model_config):
     
     return model_pipeline
 
-def aug_data(X_train, y_train, X_val, industry_col_name='2022NAICSUSCode'):
+def aug_data(X_train, y_train, X_val, industry_col_name='industrycode'):
     """ Augument the data with industry stats or other transformations.
     args:
         X_train: Training features dataframe
@@ -361,7 +357,7 @@ def generate_kfold_data (
         groups_train_val: pd.Series,
         feature_transform_config: dict,
         nsplits=2,
-        industry_col_name='2022NAICSUSCode',
+        industry_col_name='industrycode',
         obtain_industry_stats=True,
         **kwargs):
     """ Generate K-Fold data splits with processed features
@@ -372,7 +368,7 @@ def generate_kfold_data (
         feature_transform_config: Configuration dictionary for feature processing
         nsplits: Number of splits for K-Fold cross-validation
         obtain_industry_stats: Whether to augment data with industry statistics
-        industry_col_name: Column name for industry codes defaults to '2022NAICSUSCode' 
+        industry_col_name: Column name for industry codes defaults to 'industrycode' 
         kwargs: Additional arguments for processing (e.g., outcome winsorization settings)
     returns: Dictionary with fold indices as keys and processed data as values
     
