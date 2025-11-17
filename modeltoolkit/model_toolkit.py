@@ -36,13 +36,28 @@ class IndustryStatsTransformer(BaseEstimator, TransformerMixin):
         self.global_std_ = 0
 
     def smoothe_mean(self,mean, count, global_mean):
+        """Calculate a shrinkage mean using smothing parameter
+        and global mean to get a more robust estimate of industry mean when 
+        dealing with small sample sizes
+
+        Args:
+            mean (_type_): _first mean estimate
+            count (_type_): count of samples_
+            global_mean (_type_): mean of all other samples except the current observation
+
+        Returns:
+            _type_: _description_
+        """
         lambda_smooth = count/(count + self.smooth_param)
         smoothed_mean = lambda_smooth * mean + (1 - lambda_smooth) * global_mean
         return smoothed_mean
 
     def fit(self, X:pd.DataFrame, y:pd.Series):
         """"
-        Docstring
+        generate the industry mean and std dev maps from the training data
+        Args:
+            X (pd.DataFrame): Dataframe containing industry col name
+            y (pd.Series): target variable series from where to compute stats
         """
         if y is None: raise ValueError("y must be provided.")
         if X is None: raise ValueError("a dataframe containing industry col name")
